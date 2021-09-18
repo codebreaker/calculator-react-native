@@ -34,16 +34,54 @@ export default class App extends Component {
   constructor(){
     super()
     this.state = {
-      calculationText:""
+      calculationText:"",
+      resultText:""
     }
+    this.operatorsArray = ['DEL','+','-','*','/']
+
+  }
+
+  calculateResult(){
+      const text = this.state.calculationText
+      console.log(text, eval(text))
+      this.setState({
+        resultText:eval(text)
+      })
   }
   
   buttonPressed(text){
     console.log(text)
+    if(text =='='){
+        return this.calculateResult()
+    }
+
     this.setState({
       calculationText:this.state.calculationText+text
     })
   }
+
+  operatorsPressed(operatorText){
+    if(operatorText == 'DEL'){
+      //if text length>1
+      if(this.state.calculationText.length>0){
+        const edited = this.state.calculationText.slice(0,this.state.calculationText.length-1)
+        console.log("edited text-"+edited)
+        this.setState({
+          calculationText : edited
+        })
+      }
+    }else{ //case of +,-,*,/
+      let lastchar = this.state.calculationText.split('').pop()
+      // to check unable to get the operators array here
+      console.log('is last char a symbol ?',lastchar, (this.operatorsArray.indexOf(lastchar)>0))
+      if(this.operatorsArray.indexOf(lastchar)>0) return
+      if(this.state.calculationText=='') return
+      this.setState({
+        calculationText:this.state.calculationText+operatorText
+      })
+    }
+  }
+
   render() {
 
     const numpadArray = [[1,2,3],[4,5,6],[7,8,9],['.',0,'=']]
@@ -63,12 +101,13 @@ export default class App extends Component {
       )
     }
 
-    const operatorsArray = ['D','+','-','*','/']
     let operatorElements = []
-    for(let i=0;i<operatorsArray.length;i++){
+    for(let i=0;i<this.operatorsArray.length;i++){
         operatorElements.push(
           <TouchableOpacity style={styles.numButton}>
-            <Text style={styles.btnText}>{operatorsArray[i]}</Text>
+            <Text style={styles.btnText}
+              onPress={()=>{this.operatorsPressed(this.operatorsArray[i])}}
+              >{this.operatorsArray[i]}</Text>
           </TouchableOpacity>
         )
     }
@@ -82,7 +121,7 @@ export default class App extends Component {
             <Text style={styles.calculationText}>{this.state.calculationText}</Text>
           </View>
           <View style={styles.result}>
-          <Text style={styles.resultText}>121</Text>
+          <Text style={styles.resultText}>{this.state.resultText}</Text>
           </View>
           <View style={styles.buttons}>
             <View style={styles.numbers}>
@@ -107,11 +146,11 @@ const styles = StyleSheet.create({
   },
   calculationText:{
     fontSize:30,
-    color: 'white'
+    color: 'black'
   },
   resultText:{
     fontSize:24,
-    color: 'white'
+    color: 'black'
   },
   numButton:{
     flex: 1,
@@ -129,13 +168,13 @@ const styles = StyleSheet.create({
     flex:2,
     justifyContent:"center",
     alignItems:"flex-end",
-    backgroundColor:'red'
+    backgroundColor:'white'
   },
   result:{
     flex:1,
     justifyContent:"center",
     alignItems:"flex-end",
-    backgroundColor:"green"
+    backgroundColor:"white"
   },
   buttons:{
     flex: 4,
@@ -144,13 +183,13 @@ const styles = StyleSheet.create({
   },
   numbers:{
     flex:3,
-    backgroundColor:"blue"
+    backgroundColor:"#434343"
   },
   operators:{
     flex:1,
     justifyContent:"space-evenly",
     alignItems:"center",
-    backgroundColor:"grey"
+    backgroundColor:"#636363"
   }
 
 });
