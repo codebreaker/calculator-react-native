@@ -90,9 +90,8 @@ export default class App extends Component {
       let row = []
       for(let j=0;j<3;j++){
         row.push(
-          <TouchableOpacity style={styles.numButton}>
-            <Text style={styles.btnText} 
-            onPress={()=>{this.buttonPressed(numpadArray[i][j])}}>{numpadArray[i][j]}</Text>
+          <TouchableOpacity style={styles.numButton} onPress={()=>{this.buttonPressed(numpadArray[i][j])}}>
+            <Text style={styles.btnText}>{numpadArray[i][j]}</Text>
           </TouchableOpacity>
         )
       }
@@ -104,10 +103,9 @@ export default class App extends Component {
     let operatorElements = []
     for(let i=0;i<this.operatorsArray.length;i++){
         operatorElements.push(
-          <TouchableOpacity style={styles.numButton}>
-            <Text style={styles.btnText}
-              onPress={()=>{this.operatorsPressed(this.operatorsArray[i])}}
-              >{this.operatorsArray[i]}</Text>
+          <TouchableOpacity style={styles.numButton}
+            onPress={()=>{this.operatorsPressed(this.operatorsArray[i])}}>
+            <Text style={styles.btnText}>{this.operatorsArray[i]}</Text>
           </TouchableOpacity>
         )
     }
