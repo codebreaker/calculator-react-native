@@ -9,25 +9,12 @@
 import React, {Component} from 'react';
 // import type {Node} from 'react';
 import {
-  Button,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
-  useColorScheme,
   View,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-import { assertTSCallSignatureDeclaration } from '@babel/types';
 
 export default class App extends Component {
 
@@ -35,7 +22,7 @@ export default class App extends Component {
     super()
     this.state = {
       calculationText:"",
-      resultText:""
+      resultText:eval(this.calculationText)
     }
     this.operatorsArray = ['DEL','+','-','*','/']
 
@@ -52,7 +39,8 @@ export default class App extends Component {
   buttonPressed(text){
     console.log(text)
     if(text =='='){
-        return this.calculateResult()
+        // return this.calculateResult()
+        return
     }
 
     this.setState({
@@ -65,7 +53,6 @@ export default class App extends Component {
       //if text length>1
       if(this.state.calculationText.length>0){
         const edited = this.state.calculationText.slice(0,this.state.calculationText.length-1)
-        console.log("edited text-"+edited)
         this.setState({
           calculationText : edited
         })
@@ -73,7 +60,6 @@ export default class App extends Component {
     }else{ //case of +,-,*,/
       let lastchar = this.state.calculationText.split('').pop()
       // to check unable to get the operators array here
-      console.log('is last char a symbol ?',lastchar, (this.operatorsArray.indexOf(lastchar)>0))
       if(this.operatorsArray.indexOf(lastchar)>0) return
       if(this.state.calculationText=='') return
       this.setState({
@@ -96,14 +82,14 @@ export default class App extends Component {
         )
       }
       numpadViews.push(
-        <View style={styles.numRow}>{row}</View>
+        <View key={"numpad"+numpadArray[i][0]} style={styles.numRow}>{row}</View>
       )
     }
 
     let operatorElements = []
     for(let i=0;i<this.operatorsArray.length;i++){
         operatorElements.push(
-          <TouchableOpacity style={styles.numButton}
+          <TouchableOpacity key={"oper"+this.operatorsArray[i]} style={styles.numButton}
             onPress={()=>{this.operatorsPressed(this.operatorsArray[i])}}>
             <Text style={styles.btnText}>{this.operatorsArray[i]}</Text>
           </TouchableOpacity>
